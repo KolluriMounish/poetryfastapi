@@ -1,0 +1,7 @@
+task-env/
+__pycache__/
+
+*.env
+*.env.*
+env.*
+*.db
