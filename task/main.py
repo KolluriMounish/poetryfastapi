@@ -1,13 +1,14 @@
 from fastapi import FastAPI, Depends, status, Response, HTTPException
-from . import schemas, models
+from . import models, schemas
 from .database import engine, SessionLocal
+# from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
-# from pydantic import BaseModel
-# from typing import List
+from pydantic import BaseModel
+from typing import List, Annotated
+# import uvicorn
 
 app = FastAPI()
-
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -17,6 +18,8 @@ def get_db():
         yield db
     finally:
         db.close()
+
+db_dependency = Annotated[Session, Depends(get_db)]
 
 @app.get('/')
 def index():
@@ -32,13 +35,13 @@ def create(request: schemas.Task, db:Session = Depends(get_db)):
 
 
 # response_model=List[schemas.ShowTask]
-@app.get('/task')
+@app.get('/task', response_model=List[schemas.ShowTask])
 def all(db: Session = Depends(get_db)):
     tasks = db.query(models.Task).all()
     return tasks
 
 # response_model=schemas.ShowTask
-@app.get('/task/{task_id}', status_code=200)
+@app.get('/task/{task_id}', status_code=200, response_model=schemas.ShowTask)
 def show(task_id:int,  db: Session = Depends(get_db)):
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not task:
@@ -92,4 +95,8 @@ def create_user(request: schemas.User, db:Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+
+# if __name__ == '__main__':
+#     uvicorn.run(app, host="127.0.0.1", port="9000")
                 

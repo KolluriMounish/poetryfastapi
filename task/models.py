@@ -11,8 +11,8 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
+    title = Column(String(255), index=True)
+    description = Column(String(255), index=True)
     status = Column(Enum(TaskStatus), nullable=False)
     due_date = Column(Date, nullable=False)
 
@@ -21,6 +21,6 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    email = Column(String)
-    password = Column(String)
+    name = Column(String(255))
+    email = Column(String(255))
+    password = Column(String(255))

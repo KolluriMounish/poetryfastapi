@@ -15,6 +15,10 @@ class Task(BaseModel):
     status: TaskStatus
     due_date: date
 
+class ShowTask(Task):
+    
+    class Config():
+        orm_mode = True
 
 class User(BaseModel):
     name : str
