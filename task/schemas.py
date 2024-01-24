@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import date
 from .models import TaskStatus
+from typing import List
 # from enum import Enum
 
 # class TaskStatus(str, Enum):
@@ -9,22 +10,44 @@ from .models import TaskStatus
 #     COMPLETED = 'completed'
 
 
-class Task(BaseModel):
+class TaskBase(BaseModel):
     title: str
     description: str
     status: TaskStatus
     due_date: date
+    # user_id: int
 
-class ShowTask(Task):
-    
-    class Config():
-        orm_mode = True
+class Task(TaskBase):
+    # title: str
+    # description: str
+    # status: TaskStatus
+    # due_date: date
+    user_id: int
+    # class Config():
+    #     from_attributes = True
 
 class User(BaseModel):
     name : str
     email : str
     password : str
 
+class ShowUser(BaseModel):
+    name : str
+    email : str
+    tasks : List[TaskBase]
+
+    class Config():
+        from_attributes = True
+
+
+class ShowTask(BaseModel):
+    title: str
+    description: str
+    status: TaskStatus
+    due_date: date
+    creater: ShowUser
+    class Config():
+        from_attributes = True
 # class ShowTask(Task):
 #     class Config():
 #         orm_model = True
