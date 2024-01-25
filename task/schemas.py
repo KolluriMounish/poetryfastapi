@@ -48,6 +48,20 @@ class ShowTask(BaseModel):
     creater: ShowUser
     class Config():
         from_attributes = True
+
+
+class Login(BaseModel):
+    username: str
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str | None = None
 # class ShowTask(Task):
 #     class Config():
 #         orm_model = True
